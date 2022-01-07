@@ -8,7 +8,7 @@ const mongoOptions = {
   }
 
 module.exports = () => {
-    mongoose.connect('mongodb+srv://movie_user:SHgK04KnbZkZJjoQ@mcluster.yuskm.mongodb.net/MCluster?retryWrites=true&w=majority', mongoOptions)
+    mongoose.connect('mongodb+srv://movie_user:SHgK04KnbZkZJjoQ@mcluster.yuskm.mongodb.net/movie_database?retryWrites=true&w=majority', mongoOptions)
 
     console.log('function trigger');
 
@@ -22,4 +22,6 @@ module.exports = () => {
         console.log('MongoDB: Not Connected ' + err);
 
     })
+
+    mongoose.Promise = global.Promise;
 }
