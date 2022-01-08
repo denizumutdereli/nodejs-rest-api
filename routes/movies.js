@@ -2,7 +2,11 @@ const express = require('express');
 const Movie = require('../models/Movie');
 const router = express.Router();
 
-const MovieModal = require('../models/Movie');
+/* Sample project not detailed
+*  might have bugs.
+*  search / match functions not integrated
+*/
+
 
 /* Movie add endpoint 
 * $method:POST
@@ -12,7 +16,7 @@ const MovieModal = require('../models/Movie');
 router.post('/new', (req, res, next) => {
   const { title, imdb, category, country, year } = req.body;
 
-  const Movie = new MovieModal({
+  const insert = new Movie({
     title: title,
     imdb: imdb,
     category: category,
@@ -22,11 +26,14 @@ router.post('/new', (req, res, next) => {
   });
 
   //oldFashion
-  //Movie.save((err, data) => { if (err) res.json(err.message); else res.json(data); })
+  //insert.save((err, data) => { if (err) res.json(err.message); else res.json(data); })
 
-  const promise = Movie.save();
-  promise.then((data) => res.json({status:true, data:data})).catch((e) => res.json(e));
- 
+  const promise = insert.save();
+
+  promise.then((data) => {
+    !data ? next({ message: 'Not added!', code: 0 }) : res.json({status:true, data:data});
+  }).catch( (e)=>{res.json({status:false, error:e.message})} );
+  
 });
 
 /* Movies get all endpoint 
@@ -37,7 +44,7 @@ router.post('/new', (req, res, next) => {
 router.get(['/', '/all', '/full'], (req, res, next) => {
 
   const promise = Movie.find({});
-  promise.then((data) => res.json({status:true,data:data})).catch((e) => res.json(e));
+  promise.then((data) => res.json({status:true,data:data})).catch( (e)=>{res.json({status:false, error:e.message})} );
 
 });
 
@@ -54,7 +61,7 @@ router.get('/detail/:movie_id', (req, res, next) => {
 
     promise.then((data) => {
       !data ? next({ message: 'Not found!', code: 0 }) : res.json({status:true, data:data});
-    });
+    }).catch( (e)=>{res.json({status:false, error:e.message})} );;
 
   } else res.json('invalid id');
 
@@ -74,7 +81,7 @@ router.put('/update/:movie_id', (req, res, next) => {
 
     promise.then((data) => {
       !data ? next({ message: 'Not found!', code: 0 }) : res.json({status:true, data:data});
-    });
+    }).catch( (e)=>{res.json({status:false, error:e.message})} );;
 
   } else res.json('invalid id or empty data');
 
@@ -94,7 +101,7 @@ router.delete('/delete/:movie_id', (req, res, next) => {
 
     promise.then((data) => {
       !data ? next({ message: 'Not found!', code: 0 }) : res.json({status:true});
-    });
+    }).catch( (e)=>{res.json({status:false, error:e.message})} );;
 
   } else res.json('invalid id or empty data');
 
@@ -113,7 +120,31 @@ router.get('/top10', (req, res, next) => {
 
   promise.then((data) => {
     !data ? next({ message: 'Not found!', code: 0 }) : res.json({status:true, data:data});
+  }).catch( (e)=>{res.json({status:false, error:e.message})} );;
+  
+});
+
+
+/* Movie Years endpoint 
+* $method:GET
+*
+* return json status / data
+*
+*/
+router.get('/years', (req, res, next) => {
+
+  let {start, end} = req.body;
+
+  if(!start) start = 1970;
+  if(!end) end = 2022;
+
+  const promise = Movie.find({
+    year: { "$gte": parseInt(start), "$lte": parseInt(end)}
   });
+
+  promise.then((data) => {
+    !data ? next({ message: 'Not found!', code: 0 }) : res.json({status:true, data:data});
+  }).catch( (e)=>{res.json({status:false, error:e.message})} );;
   
 });
 
