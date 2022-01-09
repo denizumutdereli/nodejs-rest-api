@@ -133,7 +133,7 @@ router.get('/top10', (req, res, next) => {
 */
 router.get('/years', (req, res, next) => {
 
-  let {start, end} = req.body;
+  let {start, end, token} = req.body || req.query;
 
   if(!start) start = 1970;
   if(!end) end = 2022;

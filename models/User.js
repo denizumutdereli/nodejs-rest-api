@@ -13,7 +13,7 @@ const UserSchema = new Schema({
         type: String,
         required: [true, ' {PATH} is required.'],
         max: [16, 'max length for {PATH} is ({MAXLENGTH})'],
-        min: [5, 'min length for {PATH} is {MINLENGTH}'],
+        min: 5,
     },
     date: {
         type: Date,
