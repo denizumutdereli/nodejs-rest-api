@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
-    "test": "mocha ./test/**/*.js --reqursive --timeout 60000 --exit"
+    "test": "mocha --recursive --timeout 60000 --exit"
   },
   "dependencies": {
     "bcrpyt": "^2.0.0",
