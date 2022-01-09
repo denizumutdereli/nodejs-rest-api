@@ -3,6 +3,4 @@ node_js:
   - 10
 before_install:
   - npm install
-  - export NODE_ENV=development
-script:
-  - mocha --recursive --timeout 60000 --exit
+  - export NODE_ENV=production
